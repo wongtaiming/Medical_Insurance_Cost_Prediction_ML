@@ -183,7 +183,7 @@ st.markdown("""
 # ----------------------------
 MODEL_PATHS = {
     "Random Forest": "models/random_forest_model.pkl",
-    "Multiple Linear Regression": "models/linear_regression_model.pkl",
+    "Multiple Linear Regression": "models/multiple_linear_regression_model.pkl",
     "SVR (RBF Kernel)": "models/svr_rbf_model.pkl",
 }
 
@@ -208,16 +208,6 @@ st.sidebar.markdown("""
     </p>
 </div>
 """, unsafe_allow_html=True)
-
-st.sidebar.divider()
-
-page = st.sidebar.radio(
-    "Navigation",
-    [
-        "🏠 Home",
-        "🧮 Calculator"
-    ]
-)
 
 st.sidebar.divider()
 
