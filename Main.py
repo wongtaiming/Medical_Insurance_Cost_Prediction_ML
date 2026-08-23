@@ -187,8 +187,16 @@ MODEL_PATHS = {
     "SVR (RBF Kernel)": "models/svr_rbf_model.pkl",
 }
 
+SCALER_PATHS = {
+    "SVR (RBF Kernel)": "models/svr_scaler.pkl",
+}
+
 @st.cache_resource
 def load_model(path):
+    return joblib.load(path)
+
+@st.cache_resource
+def load_scaler(path):
     return joblib.load(path)
 
 # ----------------------------
@@ -478,24 +486,36 @@ elif page == "🧮 Calculator":
                 "remainder__children": [children]
             })
 
-            prediction = model.predict(input_data)
+            # Apply scaling only if this model needs it (SVR)
+            if model_choice in SCALER_PATHS:
+                scaler = load_scaler(SCALER_PATHS[model_choice])
+                input_for_model = scaler.transform(input_data)
+            else:
+                input_for_model = input_data
+
+            prediction = model.predict(input_for_model)
 
             estimated_cost = prediction[0]
+
+            st.success(
+                f"**{model_choice}** estimated insurance cost: "
+                f"${prediction[0]:,.2f}**"
+            )
 
             st.markdown(f"""
             <div class="prediction-card">
 
-                <div class="prediction-title">
+            <div class="prediction-title">
                     Estimated Annual Insurance Cost
-                </div>
+            </div>
 
-                <div class="prediction-value">
+            <div class="prediction-value">
                     ${estimated_cost:,.2f}
-                </div>
+            </div>
 
-                <div class="prediction-model">
+            <div class="prediction-model">
                     Prediction generated using {model_choice}
-                </div>
+            </div>
 
             </div>
             """, unsafe_allow_html=True)
