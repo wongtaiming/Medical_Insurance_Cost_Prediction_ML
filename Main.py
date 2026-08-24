@@ -481,7 +481,9 @@ elif page == "🧮 Calculator":
             prediction = model.predict(input_for_model)
 
             # Model was trained on log1p(charges) — invert back to dollars
-            if model_choice in ["Random Forest"]:
+            LOG_TARGET_MODELS = ["Random Forest"]  # add "Multiple Linear Regression" once teammate confirms
+
+            if model_choice in LOG_TARGET_MODELS:
                 estimated_cost = np.expm1(prediction[0])
             else:
                 estimated_cost = prediction[0]
