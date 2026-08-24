@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import numpy as np
 
 # ----------------------------
 # Page config
@@ -451,56 +452,40 @@ elif page == "🧮 Calculator":
             model = load_model(MODEL_PATHS[model_choice])
 
         except FileNotFoundError:
-
-            st.error(
-                f"Model file not found for **{model_choice}**."
-            )
+            st.error(f"Model file not found for **{model_choice}**.")
 
         else:
+            smoker_flag = 1 if smoker == "Yes" else 0
 
             input_data = pd.DataFrame({
-                "cat__sex_male": [
-                    1 if sex == "Male" else 0
-                ],
-
-                "cat__smoker_yes": [
-                    1 if smoker == "Yes" else 0
-                ],
-
-                "cat__region_northwest": [
-                    1 if region == "Northwest" else 0
-                ],
-
-                "cat__region_southeast": [
-                    1 if region == "Southeast" else 0
-                ],
-
-                "cat__region_southwest": [
-                    1 if region == "Southwest" else 0
-                ],
-
+                "cat__sex_male": [1 if sex == "Male" else 0],
+                "cat__smoker_yes": [smoker_flag],
+                "cat__region_northwest": [1 if region == "Northwest" else 0],
+                "cat__region_southeast": [1 if region == "Southeast" else 0],
+                "cat__region_southwest": [1 if region == "Southwest" else 0],
                 "remainder__age": [age],
-
                 "remainder__bmi": [bmi],
-
-                "remainder__children": [children]
+                "remainder__children": [children],
+                "remainder__smoker_bmi": [smoker_flag * bmi],
+                "remainder__age_squared": [age ** 2],
+                "remainder__age_smoker": [age * smoker_flag],
             })
 
             # Apply scaling only if this model needs it (SVR)
             if model_choice in SCALER_PATHS:
-                scaler = load_scaler(SCALER_PATHS[model_choice])
-                input_for_model = scaler.transform(input_data)
+                        scaler = load_scaler(SCALER_PATHS[model_choice])
+                        input_for_model = scaler.transform(input_data)
             else:
                 input_for_model = input_data
 
             prediction = model.predict(input_for_model)
 
-            estimated_cost = prediction[0]
+            # Model was trained on log1p(charges) — invert back to dollars
+            if model_choice in ["Random Forest"]:
+                estimated_cost = np.expm1(prediction[0])
+            else:
+                estimated_cost = prediction[0]
 
-            st.success(
-                f"**{model_choice}** estimated insurance cost: "
-                f"${prediction[0]:,.2f}**"
-            )
 
             st.markdown(f"""
             <div class="prediction-card">
