@@ -184,7 +184,7 @@ st.markdown("""
 # ----------------------------
 MODEL_PATHS = {
     "Random Forest": "models/random_forest_model.pkl",
-    "Multiple Linear Regression": "models/multiple_linear_regression_model.pkl",
+    "Multiple Linear Regression": "models/MLR_model.pkl",
     "SVR (RBF Kernel)": "models/svr_rbf_model.pkl",
 }
 
