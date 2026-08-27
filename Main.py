@@ -544,6 +544,10 @@ elif page == "🧮 Calculator":
                 "remainder__smoker_bmi": [smoker_flag * bmi],
                 "remainder__age_squared": [age ** 2],
                 "remainder__age_smoker": [age * smoker_flag],
+                "remainder__is_underweight": [int(bmi < 18.5)], 
+                "remainder__is_obese": [int(bmi >= 30)], 
+                "remainder__obese_smoker": [int(bmi >= 30) * smoker_flag],  
+                "remainder__children_smoker": [children * smoker_flag],
             })
 
             # Apply scaling only if this model needs it (SVR)
@@ -556,9 +560,9 @@ elif page == "🧮 Calculator":
             prediction = model.predict(input_for_model)
 
             # Model was trained on log1p(charges) — invert back to dollars
-            LOG_TARGET_MODELS = ["Random Forest"]  # add "Multiple Linear Regression" once teammate confirms
+            LOG1P_TARGET_MODELS = ["Random Forest", "Multiple Linear Regression"]
 
-            if model_choice in LOG_TARGET_MODELS:
+            if model_choice in LOG1P_TARGET_MODELS:
                 estimated_cost = np.expm1(prediction[0])
             else:
                 estimated_cost = prediction[0]
