@@ -128,6 +128,7 @@ st.markdown("""
         color: white;
         margin-bottom: 26px;
         border-left: 5px solid var(--teal);
+        min-height: 100px;
     }
 
     .hero-eyebrow {
@@ -697,7 +698,7 @@ if page == "🏠 Home":
     st.markdown("""
     <div class="hero">
         <div class="hero-eyebrow">Educational ML Project</div>
-        <h1 style="color: #ffffff !important;">Medical Insurance Cost Predictor</h1>
+        <h1 style="color: #ffffff ;">Medical Insurance Cost Predictor</h1>
         <p>
             Three machine learning models, trained on the same health and
             lifestyle data, estimate an annual insurance charge — so you
