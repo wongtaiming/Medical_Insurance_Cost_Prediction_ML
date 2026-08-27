@@ -93,9 +93,17 @@ st.markdown("""
         transition: all 0.15s ease;
     }
 
+    .stButton > button p {
+        color: #ffffff !important;
+    }
+
     .stButton > button:hover {
         background-color: var(--navy-light);
         border-color: var(--navy-light);
+    }
+
+    .stButton > button:hover p {
+        color: #ffffff !important;
     }
 
     /* Input boxes */
@@ -132,7 +140,7 @@ st.markdown("""
     }
 
     .hero h1 {
-        color: white;
+        color: #ffffff !important;
         font-size: 34px;
         margin: 0 0 12px 0;
     }
@@ -689,7 +697,7 @@ if page == "🏠 Home":
     st.markdown("""
     <div class="hero">
         <div class="hero-eyebrow">Educational ML Project</div>
-        <h1>Medical Insurance Cost Predictor</h1>
+        <h1 style="color: #ffffff !important;">Medical Insurance Cost Predictor</h1>
         <p>
             Three machine learning models, trained on the same health and
             lifestyle data, estimate an annual insurance charge — so you
